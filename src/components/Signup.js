@@ -18,7 +18,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/signup', formData);
+      const response = await axios.post('https://blog-app-be-vsoy.onrender.com/signup', formData);
       console.log(response.data);
       // Redirect to login page after successful signup
       navigate('/login');

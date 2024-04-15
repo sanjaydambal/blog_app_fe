@@ -23,7 +23,7 @@ const Dashboard = () => {
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/blogs');
+      const response = await axios.get('https://blog-app-be-vsoy.onrender.com/blogs');
       setPosts(response.data);
     } catch (error) {
       console.error('Error:', error.response.data.message);
@@ -38,7 +38,7 @@ const Dashboard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/blogs', formData);
+      const response = await axios.post('https://blog-app-be-vsoy.onrender.com/blogs', formData);
       console.log(response.data);
       fetchPosts(); // Fetch posts again to update the list
       // Clear form data
@@ -51,7 +51,7 @@ const Dashboard = () => {
 
   const handleDelete = async (postId) => {
     try {
-      await axios.delete(`http://localhost:5000/blogs/${postId}`);
+      await axios.delete(`https://blog-app-be-vsoy.onrender.com/blogs/${postId}`);
       fetchPosts(); // Fetch posts again to update the list
     } catch (error) {
       console.error('Error:', error.response.data.message);
@@ -67,7 +67,7 @@ const Dashboard = () => {
 
   const handleUpdate = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/blogs/${editPostId}`, editFormData);
+      const response = await axios.put(`https://blog-app-be-vsoy.onrender.com/blogs/${editPostId}`, editFormData);
       console.log(response.data);
       fetchPosts(); // Fetch posts again to update the list
       setEditPostId(null); // Reset edit state
