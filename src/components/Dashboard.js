@@ -5,16 +5,14 @@ const Dashboard = () => {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
-    author: '',
-    timestamp: ''
+    author: ''
   });
   const [posts, setPosts] = useState([]);
   const [editPostId, setEditPostId] = useState(null);
   const [editFormData, setEditFormData] = useState({
     title: '',
     content: '',
-    author: '',
-    timestamp: ''
+    author: ''
   });
 
   useEffect(() => {
@@ -38,11 +36,19 @@ const Dashboard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://blog-app-be-vsoy.onrender.com/blogs', formData);
+      // Generate timestamp
+      const timestamp = new Date().toISOString();
+
+      // Update formData with the generated timestamp
+      const updatedFormData = { ...formData, timestamp };
+
+      // Send the post request with updatedFormData
+      const response = await axios.post('https://blog-app-be-vsoy.onrender.com/blogs', updatedFormData);
       console.log(response.data);
       fetchPosts(); // Fetch posts again to update the list
+
       // Clear form data
-      setFormData({ title: '', content: '', author: '', timestamp: '' });
+      setFormData({ title: '', content: '', author: '' });
     } catch (error) {
       console.error('Error:', error.response.data.message);
       // Show error message
@@ -67,7 +73,14 @@ const Dashboard = () => {
 
   const handleUpdate = async () => {
     try {
-      const response = await axios.put(`https://blog-app-be-vsoy.onrender.com/blogs/${editPostId}`, editFormData);
+      // Generate timestamp
+      const timestamp = new Date().toISOString();
+  
+      // Update editFormData with the new timestamp
+      const updatedEditFormData = { ...editFormData, timestamp };
+  
+      // Send the update request with updatedEditFormData
+      const response = await axios.put(`https://blog-app-be-vsoy.onrender.com/blogs/${editPostId}`, updatedEditFormData);
       console.log(response.data);
       fetchPosts(); // Fetch posts again to update the list
       setEditPostId(null); // Reset edit state
@@ -76,6 +89,7 @@ const Dashboard = () => {
       // Show error message
     }
   };
+  
 
   const handleCancelEdit = () => {
     setEditPostId(null);
@@ -106,10 +120,6 @@ const Dashboard = () => {
           <label htmlFor="author" className="form-label">Author</label>
           <input type="text" name="author" className="form-control" id="author" value={formData.author} onChange={handleChange} required />
         </div>
-        <div className="mb-3">
-          <label htmlFor="timestamp" className="form-label">Timestamp</label>
-          <input type="datetime-local" name="timestamp" className="form-control" id="timestamp" value={formData.timestamp} onChange={handleChange} required />
-        </div>
         <button type="submit" className="btn btn-primary">Submit</button>
       </form>
 
@@ -123,7 +133,6 @@ const Dashboard = () => {
                   <input type="text" name="title" className="form-control mb-3" value={editFormData.title} onChange={handleEditChange} />
                   <textarea name="content" className="form-control mb-3" value={editFormData.content} onChange={handleEditChange}></textarea>
                   <input type="text" name="author" className="form-control mb-3" value={editFormData.author} onChange={handleEditChange} />
-                  <input type="datetime-local" name="timestamp" className="form-control mb-3" value={editFormData.timestamp} onChange={handleEditChange} />
                   <button onClick={handleUpdate} className="btn btn-primary me-2">Update</button>
                   <button onClick={handleCancelEdit} className="btn btn-secondary">Cancel</button>
                 </div>
