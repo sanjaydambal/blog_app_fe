@@ -20,7 +20,7 @@ const Header = ({ isLoggedIn, handleLogout }) => {
             </>
           ) : (
             <>
-             <Link to="/Home" className="nav-link">Home</Link>
+             <Link to="/" className="nav-link">Home</Link>
               <div style={{ width: '10px' }} />
               <Link to="/login" className="nav-link">Login</Link>
               <div style={{ width: '10px' }} />

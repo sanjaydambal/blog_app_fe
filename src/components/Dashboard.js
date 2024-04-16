@@ -21,13 +21,25 @@ const Dashboard = () => {
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get('https://blog-app-be-vsoy.onrender.com/blogs');
-      setPosts(response.data);
+      const token = sessionStorage.getItem("token");
+      console.log('token')
+      const response = await axios.get('https://blog-app-be-vsoy.onrender.com/blogs', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+  
+      if (response && response.data) {
+        setPosts(response.data);
+      } else {
+        console.error('Error fetching posts: Response or data is undefined');
+      }
     } catch (error) {
-      console.error('Error:', error.response.data.message);
-      // Show error message
+      console.error('Error fetching posts:', error.response.data.message);
     }
-  };
+  }
+  
+    
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -36,32 +48,34 @@ const Dashboard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Generate timestamp
-      const timestamp = new Date().toISOString();
-
-      // Update formData with the generated timestamp
-      const updatedFormData = { ...formData, timestamp };
-
-      // Send the post request with updatedFormData
-      const response = await axios.post('https://blog-app-be-vsoy.onrender.com/blogs', updatedFormData);
-      console.log(response.data);
-      fetchPosts(); // Fetch posts again to update the list
-
-      // Clear form data
+      const token = sessionStorage.getItem('token');
+      const response = await axios.post('https://blog-app-be-vsoy.onrender.com/blogs', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+  
+      fetchPosts();
       setFormData({ title: '', content: '', author: '' });
     } catch (error) {
       console.error('Error:', error.response.data.message);
-      // Show error message
+      // Show error message to the user
     }
   };
+  
 
   const handleDelete = async (postId) => {
     try {
-      await axios.delete(`https://blog-app-be-vsoy.onrender.com/blogs/${postId}`);
-      fetchPosts(); // Fetch posts again to update the list
+      const token = sessionStorage.getItem('token');
+      await axios.delete(`https://blog-app-be-vsoy.onrender.com/blogs/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      fetchPosts();
     } catch (error) {
       console.error('Error:', error.response.data.message);
-      // Show error message
+      // Show error message to the user
     }
   };
 
@@ -73,23 +87,20 @@ const Dashboard = () => {
 
   const handleUpdate = async () => {
     try {
-      // Generate timestamp
-      const timestamp = new Date().toISOString();
-  
-      // Update editFormData with the new timestamp
-      const updatedEditFormData = { ...editFormData, timestamp };
-  
-      // Send the update request with updatedEditFormData
-      const response = await axios.put(`https://blog-app-be-vsoy.onrender.com/blogs/${editPostId}`, updatedEditFormData);
+      const token = sessionStorage.getItem('token');
+      const response = await axios.put(`https://blog-app-be-vsoy.onrender.com/blogs/${editPostId}`, editFormData, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       console.log(response.data);
-      fetchPosts(); // Fetch posts again to update the list
-      setEditPostId(null); // Reset edit state
+      fetchPosts();
+      setEditPostId(null);
     } catch (error) {
       console.error('Error:', error.response.data.message);
-      // Show error message
+      // Show error message to the user
     }
   };
-  
 
   const handleCancelEdit = () => {
     setEditPostId(null);

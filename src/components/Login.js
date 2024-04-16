@@ -16,10 +16,15 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post('https://blog-app-be-vsoy.onrender.com/login', formData);
-
+  debugger;
       if (response && response.data) {
+        console.log(response)
         sessionStorage.setItem('token', response.data.token);
-        handleLogin(); // Call handleLogin to update the logged-in state
+       const test =  sessionStorage.getItem("token")
+       
+        console.log('Token set in sessionStorage:', response.data.token);
+        console.log(test) // Add this line for debugging
+        handleLogin(response.data.token);
         navigate('/dashboard');
       } else {
         console.error('Error:', response);
@@ -28,7 +33,8 @@ const Login = () => {
       console.error('Error:', error.response.data.message);
     }
   };
-
+  
+  
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
       <div className="card p-4" style={{ width: '20rem' }}>

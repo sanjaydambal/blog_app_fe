@@ -4,7 +4,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App';
 import { AuthProvider } from './components/AuthContext';
 
-
 import { createRoot } from 'react-dom/client';
 
 createRoot(document.getElementById('root')).render(
